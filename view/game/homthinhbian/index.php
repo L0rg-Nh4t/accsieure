@@ -1,0 +1,140 @@
+<?php
+defined('KUNKEYPR') or exit('Restricted Access');
+$kmess = 16; // Số phim hiện trong mỗi page
+$page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1;
+$start = isset($_REQUEST['page']) ? $page * $kmess - $kmess : (isset($_GET['start']) ? abs(intval($_GET['start'])) : 0);
+
+ $result = mysqli_query($kun->connect_db(), "SELECT * FROM `homthinhbian` WHERE `status`='1' AND `nguoimua`='null' ORDER BY RAND() LIMIT $start, $kmess");
+ $tong = mysqli_num_rows(mysqli_query($kun->connect_db(), "SELECT * FROM homthinhbian WHERE `status`='1' AND `nguoimua`='null'"));
+?>
+
+
+
+<div class="c-layout-page">
+    <!-- BEGIN: PAGE CONTENT -->
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-info" role="alert">
+<h2 class="alert-heading">Hòm Tiếp Tế </h2>
+                    <p><p>Anh em sẽ nhận ngẫu nhi&ecirc;n kim cương 100% nhận được</p>
+
+<p>100% Sẽ Nhận Được Kim Cương Ngẫu Nhiên</p>
+
+<p>Có Cơ Hội Nhận Được Rương Giá Trị 55.000 KC</p>
+
+<p>Đặc Biệt Trong Số 300 Rương Sẽ Có 1 Rương Được 9999 KC Chúc Các Bạn May Mắn</p></p>
+                </div>
+            </div>
+        </div>
+
+
+
+                    <div class="row row-flex  item-list">
+
+
+
+<?php 
+while ($row = mysqli_fetch_array($result)) { ?>
+
+
+<div class="col-sm-6 col-md-3">
+     <div class="classWithPad">
+        <div class="image">
+            <a target="_blank" href="#">
+              
+               <!-- <a href="/nickfreefire/nick-<?php echo $row['id'];?>.html"> -->
+                  <img src="https://i.imgur.com/ZpY2vdc.gif">
+                          <span class="ms">MS: #<?php echo $row['id'];?></span>
+                       </a>
+                        </div>
+                            <div class="description"></div>
+                                <div class="attribute_info">
+            <div class="row">
+            <div class="col-xs-6 a_att">
+            Tỉ lệ: <b>100% trúng</b>
+            </div>
+            <div class="col-xs-6 a_att">
+            Thể loại: <b>Random</b>
+            </div>
+
+            <div class="a-more">
+            <div class="row">
+            <div class="col-xs-6">
+            <div class="price_item">
+            <?php echo number_format($row['giatien']);?>đ
+            </div>
+            </div>
+            <div class="col-xs-6 ">
+            <div class="view">
+            <a href="#" class="load-modal" onclick="getdata('<?php echo $row['id'];?>')">Mua</a>
+            </div>
+            </div>
+
+
+            </div>
+            </div>
+
+
+            </div>
+            </div>
+                            </div>
+                        </div>
+
+
+<?php } ?>
+
+                            </div>
+        
+                        <div class="data_paginate paging_bootstrap paginations_custom" style="text-align: center">
+<?php
+if ($tong > $kmess){
+echo '<center>' . $kun->phantrang('/homthinhbian/', $start, $tong, $kmess) . '</center>';
+}
+?>
+                        </div>
+
+
+ 
+<style type="text/css">
+    .modal-dialog {
+    top: 180;
+}
+</style>
+
+<div class="modal fade" id="LoadModal" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    function getdata(id) {
+        var curModal = $('#LoadModal');
+        curModal.find('.modal-content').html("<div class=\"loader\" style=\"text-align: center\"><img src=\"/assets/img/loader.gif\" style=\"width: 50px;height: 50px;\"></div>");
+
+
+            $.ajax({
+                method: "POST",
+                url: "/model/game/homthinhbian/laythongtin.php",
+                data: {
+                    id: id
+                },
+                success : function(response){
+                    curModal.modal('show').find('.modal-content').html(response);
+                }
+            });
+
+
+
+    }
+</script>
+
+<!-- END: PAGE CONTENT -->
+</div>
